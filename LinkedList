@@ -1,0 +1,131 @@
+#include<iostream> 
+using namespace std;
+
+class LinkedList {	
+
+	private:
+	
+		
+	public:
+
+		struct Node {
+			Node* previous = 0;
+			int data;
+			Node* next = 0;
+		}node;
+
+		Node* root;
+		Node* endOfList;
+		int size;
+			
+		LinkedList() {
+			root = 0;
+			endOfList = 0;
+			size = 0;
+		}
+
+		~LinkedList() {            //will be called automatically when the program ends;
+
+			Node* temp = root;
+
+			while (temp != 0) {
+				root = temp;
+				temp = temp->next;
+				delete root;
+			}
+			delete root;
+			delete endOfList;
+		}	
+
+		void insertEnd(int val) {
+				
+			Node* n = new Node();
+			n->data = val;
+			n->next = 0;
+			if (root == 0) {
+				root = n;
+			}
+			n->previous = endOfList;
+			if (endOfList != 0)
+				endOfList->next = n;
+			endOfList = n;
+			size++;
+		}
+
+		void insertBegin(int value) {
+
+			Node* n = new Node();
+			n->data = value;
+			
+			if (root == 0)
+			{
+				n->next = 0;
+				n->previous = 0;
+				root = n;
+			}
+			else {
+				n->next = root;
+				n->previous = 0;
+				root = n;
+
+			}
+			size++;
+		}
+
+		void inserAftertIndex(int value, int index) {
+
+			if (index == -1) {
+				insertBegin(value);
+			}
+			else if (index == (size-1)) {
+				insertEnd(value);
+			}
+			else if (index > -1 && index <= (size-2)) {
+
+				Node* n = new Node();
+				n->data = value;
+				Node* temp = root;
+
+				for (int i = 1; i <= index; i++) {
+					temp = temp->next;
+				}
+				n->next = temp->next;
+				n->previous = temp;
+				temp->next = n;
+				n->next->previous = n;
+				size++;
+			}
+			else {
+				cout<<"Invalid index! Enter the index after which you want to insert the new node. (Indexing starts from 0)\n";
+			}
+
+		}
+
+			
+		void printList() {
+			Node* temp = root;
+				
+			while(temp != 0) {
+				cout<<(temp->data)<<" ";
+				temp = temp->next;
+			}
+			cout<<endl;
+		}
+};
+
+
+int main() {
+
+LinkedList x;
+	for (int i = 0; i < 10; i++) {
+		x.insertEnd(i);
+	}
+
+	x.insertBegin(18);
+	x.inserAftertIndex(12,5);
+	x.inserAftertIndex(1,-2);
+	x.printList();
+	
+	return 0;
+	
+}
