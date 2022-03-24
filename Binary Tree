@@ -1,0 +1,87 @@
+class BinaryTree {
+
+	private:
+
+		struct Node {
+			int data;
+			Node* left;
+			Node* right;
+		};
+
+	public:
+
+		Node* root;
+
+		Node* create() {
+
+			Node* newNode = new Node();
+			cout<<"Enter data\n";
+			cin>>(newNode->data);
+			
+			cout<<"Is there a left child for "<<(newNode->data)<<" ?('n' for no and 'y' for yes)\n";
+			char x;
+			cin>>x;
+			if (x != 'n')
+				newNode->left = create();
+
+			cout<<"Is there a right child for "<<(newNode->data)<<" ?('n' for no and 'y' for yes)\n";
+			cin>>x;
+			if (x != 'n')
+				newNode->right = create();
+
+			return newNode;
+
+		}
+
+		void in_order(Node* root) {
+
+			if (root->left != 0)
+				in_order(root->left);
+
+			cout<<root->data<<" ";
+			
+			if (root->right != 0)
+				in_order(root->right);
+			
+		}
+
+		void pre_order(Node* root) {
+			cout<<root->data<<" ";
+
+			if (root->left != 0)
+				pre_order(root->left);
+			
+			if (root->right != 0)
+				pre_order(root->right);
+			
+		}
+
+		void post_order(Node* root) {
+			
+			if (root->left != 0)
+				post_order(root->left);
+			
+			if (root->right != 0)
+				post_order(root->right);
+
+			cout<<root->data<<" ";
+		}
+};
+
+
+int main() {
+
+	BinaryTree tree1;
+	tree1.root = tree1.create();
+
+	cout<<"in-order traversal : ";
+	tree1.in_order(tree1.root);
+
+	cout<<"\npre-order traversal : ";
+	tree1.pre_order(tree1.root);
+
+	cout<<"\npost-order traversal : ";
+	tree1.post_order(tree1.root);
+	
+	return 0;
+}
