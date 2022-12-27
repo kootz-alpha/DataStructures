@@ -238,5 +238,5 @@ int main() {
     }
     cout<<endl;
     
-    retunr 0;
+    return 0;
 }
