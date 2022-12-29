@@ -15,7 +15,7 @@
     3. minDistance(*, *) - Calculate minimum distance and path between two nodes.
     4. containCycle() - Check whether a graph contains a cycle or not.
     5. connectedComponents() - Returns a list of connected components in an undirected graph.
-    6. mstKruskal() - Calculate the size and edges of the MST for a graph.
+    6. mstKruskal() - Calculate the size and edges of the MST of an undirected graph.
     
 */    
 
