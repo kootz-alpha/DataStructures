@@ -9,6 +9,14 @@
 
 // Follow 1-based indexing or numbering for the nodes. Currently not designed for multi-edges or loops or negative weights
 
+/*
+    1. Graph() - Create directed, undirected, weighted, unweighted graphs in the form of adjacency list or matrix.
+    2. minDistance(*) - Calculate minimum distance between a source node and all other nodes.
+    3. minDistance(*, *) - Calculate minimum distance and path between two nodes.
+    4. containCycle() - Check whether a graph contains a cycle or not.
+    
+*/    
+
 using namespace std;
 
 class Graph {
@@ -186,7 +194,9 @@ class Graph {
             
         }
 
-        vector<int> minDistance(int source) { // returns min distance from source to all other nodes. graph can be weighted or unweighted
+        vector<int> minDistance(int source) { 
+            // returns min distance from source to all other nodes. graph can be weighted or unweighted
+            // requires the graph to be in adjacent list form
 
             vector<int> minDist(numNodes, -1);
             minDist[source-1] = 0;
@@ -203,16 +213,14 @@ class Graph {
                     if (minDist[min-1] == -1)
                         break;
                     
-                    int i = 0, cost = minDist[min-1];
-                    
-                    while(i<numNodes) {
+                    for (auto neighbour : adjList[min-1]) {
                         
-                        if (adjMatrix[min-1][i] != -1) {
-                            if (cost+adjMatrix[min-1][i] < minDist[i] || minDist[i] == -1) {
-                                minDist[i] = cost+adjMatrix[min-1][i];
-                            }
+                        int cost = minDist[min-1] + neighbour[1];
+                        
+                        if (cost < minDist[neighbour[0]-1] || minDist[neighbour[0]-1] == -1) {
+                            
+                            minDist[neighbour[0]-1] = cost;
                         }
-                        i++;
                     }
                     unchecked.erase(find(unchecked.begin(), unchecked.end(), min));
                 }              
@@ -228,9 +236,9 @@ class Graph {
 
                     for (auto k : adjList[i]) {
 
-                        if (minDist[k-1] == -1) {
-                            minDist[k-1] = d;
-                            q.push(k);
+                        if (minDist[k[0]-1] == -1) {
+                            minDist[k[0]-1] = d;
+                            q.push(k[0]);
                         }
                     }
                     q.pop();
@@ -239,9 +247,11 @@ class Graph {
             return minDist;     
         }
 
-        // returns min path and min distance from source to destination. graph can be weighted or unweighted. return value is a vector whose
-        // last value represents min distance and first values represent the min path. if no path exist, then vector will have only one value, -1
         vector<int> minDistance(int source, int destination) { 
+            
+            // requires graph to be in adjacent list form
+            // returns min path and min distance from source to destination. graph can be weighted or unweighted. return value is a vector whose
+            // last value represents min distance and first values represent the min path. if no path exist, then vector will have only one value, -1
 
             vector<int> minDist(numNodes, -1), parent(numNodes, -1);
             minDist[source-1] = 0, parent[source-1] = source;
@@ -261,17 +271,15 @@ class Graph {
                     if (minDist[min-1] == -1)
                         break;
                     
-                    int i = 0, cost = minDist[min-1];
-                    
-                    while(i<numNodes) {
+                    for (auto neighbour : adjList[min-1]) {
                         
-                        if (adjMatrix[min-1][i] != -1) {
-                            if (cost+adjMatrix[min-1][i] < minDist[i] || minDist[i] == -1) {
-                                minDist[i] = cost+adjMatrix[min-1][i];
-                                parent[i] = min;
-                            }
+                        int cost = minDist[min-1] + neighbour[1];
+                        
+                        if (cost < minDist[neighbour[0]-1] || minDist[neighbour[0]-1] == -1) {
+                            
+                            minDist[neighbour[0]-1] = cost;
+                            parent[neighbour[0]-1] = min;
                         }
-                        i++;
                     }
                     unchecked.erase(find(unchecked.begin(), unchecked.end(), min));
                 }              
@@ -287,16 +295,16 @@ class Graph {
 
                     for (auto k : adjList[i]) {
 
-                        if (k == destination) {
-                            parent[k-1] = i+1;
-                            minDist[k-1] = d;
+                        if (k[0] == destination) {
+                            parent[k[0]-1] = i+1;
+                            minDist[k[0]-1] = d;
                             break;
                         }
 
-                        if (minDist[k-1] == -1) {
-                            minDist[k-1] = d;
-                            parent[k-1] = i+1;
-                            q.push(k);
+                        if (minDist[k[0]-1] == -1) {
+                            minDist[k[0]-1] = d;
+                            parent[k[0]-1] = i+1;
+                            q.push(k[0]);
                         }
                     }
                     q.pop();
@@ -337,6 +345,8 @@ class Graph {
         }
         
         bool containCycle() { 
+            
+            // requires graph in adjacency list form
 
             vector<int> visited(numNodes, 0);
             
@@ -386,10 +396,7 @@ int main() {
 
     vector<int> d = a.minDistance(1, 4); // get min path and distance from node 1 to node 4
 
-    for (auto i : d) {
-            cout<<i<<" ";
-    }
-    cout<<endl;
+    bool t = b.containCycle();  // returns true if cycle exists
     
     if (b.containCycle())
         cout<<"yes";
