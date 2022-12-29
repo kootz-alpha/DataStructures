@@ -370,7 +370,7 @@ class Graph {
 int main() {
 
     vector<vector<int>> edges = {{1,2, 11}, {1,3, 9}, {2,3, 3}, {3,4, 2}, {2, 4, 1}};
-    int n = 4, e = 4;
+    int n = 4;
 
     // will automatically detect whether weighted or not
     
