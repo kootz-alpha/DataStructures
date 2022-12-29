@@ -14,6 +14,7 @@
     2. minDistance(*) - Calculate minimum distance between a source node and all other nodes.
     3. minDistance(*, *) - Calculate minimum distance and path between two nodes.
     4. containCycle() - Check whether a graph contains a cycle or not.
+    5. connectedComponents() - Returns a list of connected components in an undirected graph.
     
 */    
 
@@ -373,7 +374,44 @@ class Graph {
                 }
             }
             return false;
+        }
+    
+        vector<vector<int>> connectedComponents() {
 
+            // requires the graph in adjacent list form
+            // only used for undirected graphs
+
+            vector<int> visited(numNodes, 0);
+            vector<vector<int>> connected;
+
+            for (int i = 0; i < numNodes; i++) {
+
+                if (visited[i] == 0) {
+
+                    // do bfs
+                    vector<int> group;
+                    queue<int> q;
+                    q.push(i+1);
+                    visited[i] = 1;
+
+                    while (!q.empty()) {
+
+                        int front = q.front();
+                        group.push_back(front);
+                        q.pop();
+
+                        for (auto neighbour : adjList[front-1]) {
+
+                            if (visited[neighbour[0]-1] != 1) {
+                                q.push(neighbour[0]);
+                                visited[neighbour[0]-1] = 1;
+                            }
+                        }
+                    }
+                    connected.push_back(group);
+                }
+            }
+            return connected;
         }
 };
 
