@@ -15,6 +15,7 @@
     3. minDistance(*, *) - Calculate minimum distance and path between two nodes.
     4. containCycle() - Check whether a graph contains a cycle or not.
     5. connectedComponents() - Returns a list of connected components in an undirected graph.
+    6. mstKruskal() - Calculate the size and edges of the MST for a graph.
     
 */    
 
@@ -412,6 +413,71 @@ class Graph {
                 }
             }
             return connected;
+        }
+    
+        vector<vector<int>> mstKruskal(int numN, vector<vector<int>> edgeList) {
+            
+            // returns a vector whose last element is the size of the MST, and first elements are the edges of the MST
+            // can be used for undirected graph. if unweighted, create edgeList with weight 1
+            
+            sort(edgeList.begin(), edgeList.end(), [](vector<int> a, vector<int> b) -> bool {
+                if (a[2]<=b[2])
+                    return true;
+                return false;
+            });
+            
+            int size = 0, e = 0;
+            vector<vector<int>> kruskal;
+            vector<int> parent(numN);
+            iota(parent.begin(), parent.end(), 1);
+            vector<int> visited(numN, 0);
+            
+            for (auto edge : edgeList) {
+                
+                if (e == numN-1)
+                    break;
+                
+                if (visited[edge[0]-1] == 0 && visited[edge[1]-1] == 0) {
+                    
+                    kruskal.push_back(edge);
+                    size += edge[2];
+                    e++;
+                    parent[edge[1]-1] = edge[0];
+                    visited[edge[0]-1] = 1;
+                    visited[edge[1]-1] = 1;
+                }
+                else {
+                    
+                    int p1 = parent[edge[0]-1], p2 = parent[edge[1]-1];
+                    
+                    while (p1 != parent[p1-1] || p2 != parent[p2-1]) {
+                        p1 = parent[p1-1];
+                        p2 = parent[p2-1];
+                    }
+                    parent[edge[0]-1] = p1;
+                    parent[edge[1]-1] = p2;
+                    
+                    if (p1 != p2) {
+                        
+                        kruskal.push_back(edge);
+                        size += edge[2];
+                        e++;
+                        
+                        if (visited[edge[0]-1] == 0) {
+                            
+                            parent[edge[0]-1] = p2;
+                            visited[edge[0]-1] = 1;
+                        }
+                        else {
+                            
+                            parent[edge[1]-1] = p1;
+                            visited[edge[1]-1] = 1;
+                        }
+                    }
+                }
+            }
+            kruskal.push_back({size});
+            return kruskal;
         }
 };
 
