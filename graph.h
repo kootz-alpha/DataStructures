@@ -16,7 +16,7 @@
     4. containCycle() - Check whether a graph contains a cycle or not.
     5. connectedComponents() - Returns a list of connected components in an undirected graph.
     6. mstKruskal() - Calculate the size and edges of the MST of an undirected graph.
-    
+
 */    
 
 using namespace std;
