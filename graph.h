@@ -216,6 +216,43 @@ class Graph {
             
             return result;     
         }
+    
+        bool containCycle() { // initially pass parent and current as same
+
+                cout<<"inside"<<endl;
+
+                vector<bool> visited(numNodes, false);
+
+                for (int i = 0; i < numNodes; i++) {
+
+                    if (!visited[i]) {
+
+                        if (containCycle(-1, i+1, visited))
+                            return true;
+                    }
+                }
+
+                return false;
+
+        }
+
+        bool containCycle(int parent, int current, vector<bool>& visited) { // initially pass parent and current as same
+
+                visited[current-1] = true;
+
+                for (int neighbour : adjList[current-1]) {
+
+                    if (!visited[neighbour-1]) {
+
+                        if (containCycle(current, neighbour, visited))
+                            return true;
+                    }
+                    else if (neighbour != parent)
+                        return true;
+                }
+
+                return false;
+        }
 
 
 };
@@ -237,6 +274,11 @@ int main() {
             cout<<i<<" ";
     }
     cout<<endl;
+    
+    if (b.containCycle())
+        cout<<"yes";
+    else 
+        cout<<"no";
     
     return 0;
 }
