@@ -39,7 +39,7 @@ class Graph {
             }
         }
         if (p)
-            min = -1;
+            min = unchecked[0];
         
         return min;    
     }
